@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import styled from 'styled-components';
 import { setDraggingIndex } from '../../store/grid/gridSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import GridComponent, { GridComponentProps } from './GridComponent';
 
 export interface GridKidProps {
   gridId: string;
@@ -10,23 +11,24 @@ export interface GridKidProps {
     row: number;
     width: number;
     height: number;
-  }
+  };
+  gridComponent: GridComponentProps;
 }
 
-const StyledGridKid = styled.div<{column: string, row: string}>`
+const StyledGridKid = styled.div<{ column: string, row: string }>`
   grid-row: ${(props) => props.row};
   grid-column: ${(props) => props.column};
   background-color: #ffa9e2;
+  position: relative;
 `
+const GridKid: React.FC<GridKidProps> = ({ gridId, children, gridArea, gridComponent, ...rest }) => {
 
-const GridKid: React.FC<GridKidProps> = ({gridId, children, gridArea, ...rest}) => {
-
+  const kidRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const grid = useAppSelector((state) => state.grid);
 
   const onDragStart = () => {
     dispatch(setDraggingIndex(gridId));
-    console.log('on drag start: ', gridId);
   }
 
   const columnString = useMemo(() => {
@@ -37,18 +39,36 @@ const GridKid: React.FC<GridKidProps> = ({gridId, children, gridArea, ...rest}) 
     return `${gridArea.row} / span ${gridArea.height}`;
   }, [gridArea])
 
-  console.log(columnString)
+/*   const resizeObserver = new ResizeObserver(entries => {
+    for (let entry of entries) {
+      if(entry.contentBoxSize) {
+        // Firefox implements `contentBoxSize` as a single content rect, rather than an array
+        const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
+        
+        console.log(contentBoxSize)
+      } else {
 
+      }
+    }
+    
+    console.log('Size changed');
+  });
+  
+  useEffect(() => {
+    if (kidRef.current) {
+      resizeObserver.observe(kidRef.current);
+    }
+  }, [])
+ */
   return (
     <StyledGridKid
-    column={columnString}
-    row={rowString}
-    draggable={true}
-    onDragOver={(e) => console.log(e)}
-    onDragEnter={(e) => e.preventDefault()}
-    onDragStart={onDragStart}
-    {...rest}>
-      {children}
+      ref={kidRef}
+      column={columnString}
+      row={rowString}
+      draggable={true}
+      onDragStart={onDragStart}
+      {...rest}>
+     <GridComponent {...gridComponent} />
     </StyledGridKid>
   )
 }

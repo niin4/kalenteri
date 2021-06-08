@@ -6,8 +6,10 @@ import Header from './components/navigation/Header';
 import firebase, { auth, createUserProfileDocument } from './utils/firebase';
 import { useAppSelector, useAppDispatch } from './store/hooks';
 import { setCurrentUser } from './store/user/userSlice';
+import { setKidsFromCollections } from './store/grid/gridSlice';
 import MainView from '../src/views/Main';
 import { BreakpointProvider, MediaQuery } from './utils/breakpoints';
+import { getUserCollections } from './utils/firebase/collections';
 
 function App() {
 
@@ -39,6 +41,18 @@ function App() {
     return unsubscribe;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    async function fetchData() {
+      const collections = await getUserCollections(user!.id);
+      if (collections && collections.length > 0) {
+        dispatch(setKidsFromCollections(collections));
+      }
+    }
+    if (user) {
+      fetchData();
+    }
+  }, [user, dispatch])
 
   return (
     <BreakpointProvider queries={queries}>

@@ -1,4 +1,3 @@
-import { relative } from 'node:path';
 import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { setColumnsByBreakpoints } from '../../store/grid/gridSlice';
@@ -64,8 +63,6 @@ const GridContainer: React.FC = ({ children }) => {
         row: getRow(i, grid.columns)
       }));
   }, [grid.columns])
-
-  console.log(dropZones);
 
   return <div style={{position: 'relative'}}>
     <Container columns={gridColumns}>

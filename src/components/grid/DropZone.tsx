@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useAppDispatch } from '../../store/hooks';
 import { setNewPosition } from '../../store/grid/gridSlice';
