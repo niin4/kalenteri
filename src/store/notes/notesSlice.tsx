@@ -1,25 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-interface Note {
-  id: string;
-  title?: string;
-  text?: string;
-}
+import { Note } from '../../components/notes/NotesBase'
 
 interface NotesState {
-  notes: Note[];
+  notes: {[collectionId: string]: Note[]}
 }
 
 const initialState: NotesState = {
-  notes: []
+  notes: {}
 }
 
 export const notesSlice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
-    setNotes: (state, action: PayloadAction<Note[]>) => {
-      state.notes = action.payload
+    setNotes: (state, action: PayloadAction<{collectionId: string, notes: Note[]}>) => {
+      state.notes[action.payload.collectionId] = action.payload.notes
     },
   },
 })
@@ -28,8 +23,5 @@ export const notesSlice = createSlice({
 export const {
   setNotes
 } = notesSlice.actions
-
-// Other code such as selectors can use the imported `RootState` type
-// export const selectCount = (state: RootState) => state.counter.value
 
 export default notesSlice.reducer

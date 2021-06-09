@@ -11,7 +11,7 @@ const MainView = () => {
     <div style={{display: 'flex', flexDirection: 'column'}}>
       <h2>Movable stuff</h2>
       <GridContainer >
-        {grid.kids.map((k, i) => <GridKid {...k}>kid-{i}</GridKid>)}
+        {grid.kids.map((k, i) => <GridKid key={'kid-' + i} {...k}>kid-{i}</GridKid>)}
       </GridContainer>
     </div>)
 }

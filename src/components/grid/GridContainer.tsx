@@ -66,7 +66,7 @@ const GridContainer: React.FC = ({ children }) => {
 
   return <div style={{position: 'relative'}}>
     <Container columns={gridColumns}>
-      {dropZones.map(dz => <DropZone {...dz} />)}
+      {dropZones.map(dz => <DropZone key={dz.dropZoneId} {...dz} />)}
     </Container>
     <Container columns={gridColumns}>
       {children}

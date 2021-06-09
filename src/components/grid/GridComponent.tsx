@@ -1,6 +1,6 @@
 import React from 'react'
 import CalendarBase, { CalendarData } from '../calendar/CalendarBase';
-import NotesBase, { NotesData } from '../notes/NotesBase';
+import NotesBase, { NotesCollectionData } from '../notes/NotesBase';
 
 export enum ComponentType {
   CALENDAR, NOTES
@@ -8,7 +8,7 @@ export enum ComponentType {
 
 export interface GridComponentProps {
   type: ComponentType;
-  data: CalendarData | NotesData;
+  data: CalendarData | NotesCollectionData;
 }
 
 const GridComponent: React.FC<GridComponentProps> = ({type, data}) => {
